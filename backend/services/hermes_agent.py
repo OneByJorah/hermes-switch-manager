@@ -15,7 +15,14 @@ from models import Switch, ConfigBackup, ChatMessage, SecurityFinding, AuditLog,
 from services.netmiko_client import pull_running_config, execute_commands, check_health
 
 
-client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
+def _get_client() -> AsyncOpenAI:
+    """Lazy-initialize the OpenAI client to allow app startup without API key."""
+    if not settings.OPENAI_API_KEY:
+        raise ValueError(
+            "OPENAI_API_KEY is not set. Please add it to your .env file "
+            "or set the OPENAI_API_KEY environment variable."
+        )
+    return AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
 
 SYSTEM_PROMPT = """You are Hermes, an expert network engineer AI assistant. You help manage, troubleshoot, and configure network switches and devices.
 
@@ -307,7 +314,8 @@ async def ask(session_id: str, message: str):
 
             # First pass — get assistant response + possible tool calls
             messages.append({"role": "user", "content": message})
-            response = await client.chat.completions.create(
+            openai_client = _get_client()
+            response = await openai_client.chat.completions.create(
                 model=settings.OPENAI_MODEL,
                 messages=messages,
                 tools=TOOLS,
@@ -350,7 +358,8 @@ async def ask(session_id: str, message: str):
 
             # Execute tool calls if any
             if tool_calls:
-                yield f"data: {json.dumps({'token': '\n\n🔧 **Executing tools...**\n\n'})}\n\n"
+                tool_msg = '\n\n🔧 **Executing tools...**\n\n'
+                yield f"data: {json.dumps({'token': tool_msg})}\n\n"
                 tool_results = []
                 for idx in sorted(tool_calls.keys()):
                     tc = tool_calls[idx]
@@ -364,15 +373,18 @@ async def ask(session_id: str, message: str):
                         })
                         # Show truncated result
                         display = result[:1500] + "..." if len(result) > 1500 else result
-                        yield f"data: {json.dumps({'token': f'⚙️ **{tc[\"function\"][\"name\"]}** →\n```\n{display}\n```\n\n'})}\n\n"
+                        tool_out = f'⚙️ **{tc["function"]["name"]}** →\n```\n{display}\n```\n\n'
+                        yield f"data: {json.dumps({'token': tool_out})}\n\n"
                     except Exception as e:
-                        yield f"data: {json.dumps({'token': f'❌ Tool error: {e}\n\n'})}\n\n"
+                        err_out = f'❌ Tool error: {e}\n\n'
+                        yield f"data: {json.dumps({'token': err_out})}\n\n"
 
                 # Final pass — get final response with tool results
                 messages.append({"role": "assistant", "content": collected_content, "tool_calls": [tc for tc in tool_calls.values()]})
                 messages.extend(tool_results)
 
-                final_response = await client.chat.completions.create(
+                openai_client = _get_client()
+                final_response = await openai_client.chat.completions.create(
                     model=settings.OPENAI_MODEL,
                     messages=messages,
                     stream=True,

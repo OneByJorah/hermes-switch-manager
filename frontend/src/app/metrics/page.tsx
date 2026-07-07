@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { dashboardApi, switchesApi, SwitchData } from '@/lib/api'
 import { timeAgo } from '@/lib/utils'
-import { Activity, RefreshCw, Cpu, Memory, Wifi, AlertTriangle } from 'lucide-react'
+import { Activity, RefreshCw, Cpu, MemoryStick, Wifi, AlertTriangle } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 export default function MetricsPage() {
@@ -43,7 +43,7 @@ export default function MetricsPage() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <MetricStatCard icon={<Cpu className="w-5 h-5" />} label="Avg CPU"
           value={avgMetric(healthSummary, 'cpu_usage')} unit="%" color="blue" />
-        <MetricStatCard icon={<Memory className="w-5 h-5" />} label="Avg Memory"
+        <MetricStatCard icon={<MemoryStick className="w-5 h-5" />} label="Avg Memory"
           value={avgMetric(healthSummary, 'memory_usage')} unit="%" color="purple" />
         <MetricStatCard icon={<Wifi className="w-5 h-5" />} label="Interfaces Up"
           value={sumMetric(healthSummary, 'interfaces_up')} unit={`/ ${sumMetric(healthSummary, 'interfaces_up') + sumMetric(healthSummary, 'interfaces_down')}`} color="green" />
@@ -117,7 +117,7 @@ export default function MetricsPage() {
 }
 
 function MetricStatCard({ icon, label, value, unit, color }: {
-  icon: React.ReactNode; label: string; value: number; unit: string; color: string
+  icon: React.ReactNode; label: string; value: number | null; unit: string; color: string
 }) {
   const colors: Record<string, string> = {
     blue: 'text-blue-400', purple: 'text-purple-400', green: 'text-green-400', red: 'text-red-400'

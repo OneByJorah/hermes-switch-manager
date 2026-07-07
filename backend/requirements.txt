@@ -11,7 +11,6 @@ pydantic==2.7.4
 pydantic-settings==2.3.0
 httpx==0.27.0
 pyyaml==6.0.1
-nmap2==1.0.3
 jinja2==3.1.4
 paramiko==3.4.0
 scp==0.14.5
