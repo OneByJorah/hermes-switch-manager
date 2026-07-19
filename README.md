@@ -22,6 +22,16 @@
 
 ---
 
+## 📸 Screenshots
+
+> Captured from the running app (FastAPI backend + Next.js frontend) during this polish pass.
+
+| Dashboard | Switches | AI Chat |
+|-----------|----------|---------|
+| ![Dashboard](docs/screenshots/dashboard.png) | ![Switches](docs/screenshots/switches.png) | ![Chat](docs/screenshots/chat.png) |
+
+---
+
 ## Quick Start 🚀
 
 ### Prerequisites
@@ -33,7 +43,7 @@
 
 ```bash
 # 1. Clone and enter
-git clone https://github.com/your-org/hermes-switch-manager.git
+git clone https://github.com/OneByJorah/hermes-switch-manager.git
 cd hermes-switch-manager
 
 # 2. Backend setup
@@ -254,3 +264,11 @@ MIT License — see [LICENSE](LICENSE) for details.
 - [AINetworkHelperForContainerLab](https://github.com/zerxen/AINetworkHelperForContainerLab) — Containerlab integration
 - [Netmiko](https://github.com/ktbyers/netmiko) — Multi-vendor SSH library
 - [OpenAI](https://openai.com) — AI chat capabilities
+
+---
+
+## 👤 Author
+
+Built by **Jhonattan L. Jimenez** ([@OneByJorah](https://github.com/OneByJorah)) under **JorahOne LLC**.
+
+More projects: [github.com/OneByJorah](https://github.com/OneByJorah)
