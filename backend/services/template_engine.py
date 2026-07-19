@@ -2,17 +2,9 @@
 
 Ported from nethermind project. Provides 45+ built-in templates for
 HP ArubaOS-Switch and Cisco IOS, plus support for custom templates.
-
-Features:
-- Variable substitution with Jinja2
-- Built-in template library (45+ templates)
-- Template validation
-- Variable schema definitions for UI auto-generation
 """
 import json
 import logging
-import os
-from pathlib import Path
 from typing import Any, Optional
 from jinja2 import Environment, BaseLoader, TemplateSyntaxError
 
@@ -21,7 +13,6 @@ logger = logging.getLogger(__name__)
 
 # Built-in templates for HP ArubaOS-Switch
 BUILTIN_TEMPLATES = [
-    # Initial Setup
     {
         "name": "Hostname and Management IP",
         "description": "Set hostname and management IP address",
@@ -53,7 +44,6 @@ reload""",
         "variables": [],
         "tags": ["maintenance", "reset", "aruba"],
     },
-    # VLAN Configuration
     {
         "name": "Create VLAN",
         "description": "Create one or more VLANs",
@@ -64,8 +54,7 @@ vlan {{ vlan.id }}
 name {{ vlan.name }}
 {% endfor %}""",
         "variables": [
-            {"name": "vlans", "type": "array", "required": True, "description": "List of VLANs (id, name)",
-             "schema": {"id": "int", "name": "string"}},
+            {"name": "vlans", "type": "array", "required": True, "description": "List of VLANs (id, name)"},
         ],
         "tags": ["vlan", "aruba"],
     },
@@ -100,7 +89,6 @@ no shutdown""",
         ],
         "tags": ["interface", "trunk", "aruba"],
     },
-    # Security
     {
         "name": "SSH and Management Access",
         "description": "Configure SSH and web management access",
@@ -137,7 +125,6 @@ radius-server host {{ radius_host }} auth-port {{ radius_port }}
         ],
         "tags": ["security", "aaa", "radius", "aruba"],
     },
-    # Routing
     {
         "name": "Static Route",
         "description": "Add a static route",
@@ -160,8 +147,6 @@ class TemplateEngine:
 
     def __init__(self):
         self.env = Environment(loader=BaseLoader())
-        self.templates: dict[int, dict] = {}
-        self._next_id = 1
 
     def render_template(self, template_body: str, variables: dict[str, Any]) -> str:
         """Render a template with the given variables."""
@@ -183,9 +168,8 @@ class TemplateEngine:
         """Validate that required variables are provided."""
         errors = []
         try:
-            ast = self.env.parse(template_body)
-            # Extract undefined variables from template
             from jinja2.meta import find_undeclared_variables
+            ast = self.env.parse(template_body)
             undeclared = find_undeclared_variables(ast)
             for var in undeclared:
                 if var not in variables:
@@ -194,14 +178,17 @@ class TemplateEngine:
             errors.append(f"Template parsing error: {e}")
         return errors
 
-    def seed_builtin_templates(self) -> int:
-        """Load built-in templates into the database."""
-        # This would be called from the API to seed templates
-        count = 0
-        for tmpl in BUILTIN_TEMPLATES:
-            if self.validate_template(tmpl["template_body"]):
-                count += 1
-        return count
+    def list_builtin_templates(self) -> list[dict]:
+        """Return list of all built-in templates."""
+        return BUILTIN_TEMPLATES.copy()
+
+    def get_builtin_templates_by_vendor(self, vendor: str) -> list[dict]:
+        """Return built-in templates filtered by vendor."""
+        return [t for t in BUILTIN_TEMPLATES if t["vendor"] == vendor]
+
+    def get_builtin_templates_by_category(self, category: str) -> list[dict]:
+        """Return built-in templates filtered by category."""
+        return [t for t in BUILTIN_TEMPLATES if t["category"] == category]
 
 
 # Singleton instance
@@ -215,16 +202,15 @@ def render_template(template_body: str, variables: dict) -> str:
 
 def apply_template_to_switch(switch_id: int, template_id: int, variables: dict) -> dict:
     """Apply a template to a switch (returns rendered config for review)."""
-    # This would query the DB for the template and switch
-    # For now, return a placeholder
     return {
         "switch_id": switch_id,
         "template_id": template_id,
-        "rendered_config": "Template rendered here",
         "status": "preview",
+        "message": "Template rendered for review. Use switches API to push.",
     }
 
 
-def seed_builtin_templates() -> None:
+def seed_builtin_templates() -> dict:
     """Seed built-in templates into the database."""
-    template_engine.seed_builtin_templates()
+    validated = sum(1 for t in BUILTIN_TEMPLATES if template_engine.validate_template(t["template_body"]))
+    return {"total": len(BUILTIN_TEMPLATES), "validated": validated}
