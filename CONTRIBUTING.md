@@ -1,4 +1,4 @@
-# Contributing to $(basename $(pwd))
+# Contributing to Hermes Switch Manager
 
 Thank you for your interest in contributing!
 
@@ -13,8 +13,8 @@ Thank you for your interest in contributing!
 ## Development Setup
 
 ```bash
-git clone https://github.com/OneByJorah/$(basename $(pwd)).git
-cd $(basename $(pwd))
+git clone https://github.com/OneByJorah/hermes-switch-manager.git
+cd hermes-switch-manager
 ```
 
 See README.md for specific setup instructions.
@@ -28,7 +28,7 @@ See README.md for specific setup instructions.
 
 ## Pull Request Guidelines
 
-- Provide a clear description of changes
+- Include a clear description of changes
 - Reference any related issues
 - Ensure all tests pass
 - Keep PRs focused on a single change

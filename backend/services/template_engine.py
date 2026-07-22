@@ -1,6 +1,6 @@
 """Jinja2 configuration template engine.
 
-Ported from nethermind project. Provides 45+ built-in templates for
+Ported from nethermind project. Supplies 45+ built-in templates for
 HP ArubaOS-Switch and Cisco IOS, plus support for custom templates.
 """
 import json
@@ -165,7 +165,7 @@ class TemplateEngine:
             return False
 
     def validate_variables(self, template_body: str, variables: dict) -> list[str]:
-        """Validate that required variables are provided."""
+        """Validate that required variables are supplied."""
         errors = []
         try:
             from jinja2.meta import find_undeclared_variables

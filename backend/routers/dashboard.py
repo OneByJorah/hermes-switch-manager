@@ -1,6 +1,6 @@
 """Dashboard and monitoring endpoints.
 
-Provides aggregate stats, device metrics, and audit log views.
+Returns aggregate stats, device metrics, and audit log views.
 """
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
