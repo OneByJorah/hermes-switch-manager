@@ -1,31 +1,24 @@
 <div align="center">
-  <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white">
-  <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white">
-  <img src="https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white">
-  <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge">
-  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
-</div>
 
-<br>
+![hermes-switch-manager banner](docs/assets/banner.svg)
 
-<div align="center">
-  <h1>hermes-switch-manager</h1>
-  <p><strong>AI-Powered Network Switch Config Management</strong></p>
-  <p>Multi-vendor SSH, AI chat, workflow automation, and security auditing.</p>
-  <p>
-    <a href="#features">Features</a> •
-    <a href="#quick-start">Quick Start</a> •
-    <a href="#architecture">Architecture</a> •
-    <a href="#contributing">Contributing</a>
-  </p>
+# hermes-switch-manager
+
+AI-powered network switch config management
+
+![License](https://img.shields.io/badge/license-MIT-brightgreen)
+![Language](https://img.shields.io/badge/language-Python-blue)
 </div>
 
 ---
 
-## Screenshot
+<p align="center">
+  <img src="docs/assets/screenshot.png" alt="hermes-switch-manager preview" width="90%">
+</p>
 
-![hermes-switch-manager Dashboard](docs/screenshot.png)
-*AI-powered network switch management dashboard with multi-vendor support.*
+<br>
+
+---
 
 ## Features
 
@@ -53,7 +46,6 @@ Open **http://localhost:3000** in your browser.
 ### Local Development
 
 ```bash
-# Backend
 cd backend
 pip install -r requirements.txt
 uvicorn main:app --reload --port 8000
@@ -136,7 +128,18 @@ MIT © Jhonattan L. Jimenez
 
 ---
 
-<div align="center">
-  <p>AI-powered network switch configuration management.</p>
-  <p><a href="https://github.com/OneByJorah">@OneByJorah</a></p>
-</div>
+## 🤝 Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). All contributions follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## 🔒 Security
+
+Found a vulnerability? Please follow our [Security Policy](SECURITY.md) and report privately to `security@jorahone.com`.
+
+## 📄 License
+
+[MIT License](LICENSE) © Jhonattan L. Jimenez (OneByJorah)
+
+---
+
+<p align="center">Built with 🌴 by <a href="https://github.com/OneByJorah">OneByJorah</a> · <a href="https://jorahone.com">jorahone.com</a></p>
