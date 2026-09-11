@@ -42,17 +42,33 @@ def parse_topology_file(file_path: str, db: Session = Depends(get_db)):
     import os
     import yaml
 
-    if not os.path.isfile(file_path):
+    if not file_path or not file_path.endswith((".clab.yml", ".clab.yaml")):
+        raise HTTPException(status_code=400, detail="Only .clab.yml/.clab.yaml files are allowed")
+
+    from config import settings
+    allowed_bases = [os.path.realpath(p) for p in [
+        settings.CLAB_DIR,
+        "/etc/containerlab",
+        os.path.expanduser("~/clab"),
+        os.path.expanduser("~/containerlab"),
+        os.getcwd(),
+    ]]
+
+    resolved = os.path.realpath(file_path)
+    if not any(resolved == base or resolved.startswith(base.rstrip(os.sep) + os.sep) for base in allowed_bases):
+        raise HTTPException(status_code=403, detail="File must be inside a configured Containerlab directory")
+
+    if not os.path.isfile(resolved):
         raise HTTPException(status_code=404, detail="File not found")
 
     try:
-        with open(file_path) as f:
+        with open(resolved) as f:
             data = yaml.safe_load(f)
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Failed to parse YAML: {e}")
 
     from services.containerlab_service import parse_topology_yaml
-    topology = parse_topology_yaml(file_path, data)
+    topology = parse_topology_yaml(resolved, data)
     result = sync_topology_to_db(db, topology)
     return result
 

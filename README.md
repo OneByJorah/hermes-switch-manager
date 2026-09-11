@@ -27,7 +27,7 @@ AI-powered network switch config management
 - **Workflow Automation** — IRIS-style workflow engine for disciplined config changes.
 - **Security Auditing** — CVE scanning, AAA checks, CIS/NIST compliance.
 - **Containerlab Integration** — Auto-discovery and sync of lab topologies.
-- **Template Engine** — 45+ Jinja2 templates for common network tasks.
+- **Template Engine** — 8 built-in Jinja2 templates for common network tasks.
 - **Next.js Dashboard** — Modern, responsive web interface.
 - **Docker Compose** — One-command production deployment.
 
@@ -60,10 +60,10 @@ npm run dev
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `DATABASE_URL` | `sqlite:///hermes.db` | Database connection string |
+| `DATABASE_URL` | `sqlite:///./switches.db` | Database connection string |
 | `OPENAI_API_KEY` | *(empty)* | OpenAI API key for Hermes AI |
-| `DEFAULT_SSH_USERNAME` | `admin` | Default SSH username |
-| `DEFAULT_SSH_PASSWORD` | — | Default SSH password |
+| `SSH_USERNAME` | `admin` | Default SSH username |
+| `SSH_PASSWORD` | *(empty)* | Default SSH password |
 
 ## Architecture
 
@@ -82,7 +82,7 @@ Browser (Next.js) ──API──▶ FastAPI Backend ──▶ SQLAlchemy ──
 - **Backend**: FastAPI (Python 3.11+), SQLAlchemy, Netmiko
 - **Frontend**: Next.js 14 (TypeScript)
 - **AI**: OpenAI GPT (Hermes agent)
-- **Templates**: Jinja2 (45+ built-in)
+- **Templates**: Jinja2 (8 built-in)
 - **Database**: SQLite (default), PostgreSQL (production)
 - **Deployment**: Docker Compose
 
@@ -98,7 +98,6 @@ hermes-switch-manager/
 ├── frontend/
 │   ├── src/app/             # Next.js pages
 │   └── package.json
-├── templates/               # Jinja2 config templates
 ├── docker-compose.yml       # Docker deployment
 └── .env.example             # Configuration template
 ```
@@ -109,10 +108,10 @@ hermes-switch-manager/
 |----------|--------|-------------|
 | `/api/switches` | GET/POST | Manage network switches |
 | `/api/configs/{id}` | GET | Retrieve device configuration |
-| `/api/templates` | GET | List Jinja2 templates |
-| `/api/chat` | POST | Chat with Hermes AI agent |
+| `/api/chat/stream` | POST | Stream a reply from the Hermes AI agent |
 | `/api/workflows` | GET/POST | Manage configuration workflows |
-| `/api/security/audit` | POST | Run security audit |
+| `/api/security/audit/{switch_id}` | POST | Run a security audit on one switch |
+| `/api/security/audit-all` | POST | Run security audits on all switches |
 
 ## Contributing
 
@@ -120,7 +119,7 @@ Contributions are welcome. Please see [CONTRIBUTING.md](CONTRIBUTING.md) for gui
 
 ## Security
 
-For security concerns, see [SECURITY.md](SECURITY.md). Please report vulnerabilities to **info@jorahone.com** — do not use public issues.
+For security concerns, see [SECURITY.md](SECURITY.md). Please report vulnerabilities to **security@jorahone.com** — do not use public issues.
 
 ## License
 

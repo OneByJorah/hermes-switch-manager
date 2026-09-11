@@ -12,6 +12,7 @@ from typing import Optional
 from pathlib import Path
 
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 from models import Switch, ContainerlabTopology, AuditLog
 from config import settings
 
@@ -125,6 +126,7 @@ def sync_topology_to_db(db: Session, topology_data: dict) -> dict:
 
     # Create/update Switch entries
     switches_created = 0
+    switches_skipped = 0
     for node in topology_data["nodes"]:
         mgmt_ip = node.get("mgmt_ip", "")
         if not mgmt_ip:
@@ -153,17 +155,22 @@ def sync_topology_to_db(db: Session, topology_data: dict) -> dict:
             existing_switch.vendor = vendor
             existing_switch.location = f"Containerlab: {name}"
         else:
-            sw = Switch(
-                hostname=hostname,
-                ip_address=mgmt_ip,
-                vendor=vendor,
-                device_type=vendor,
-                status="unknown",
-                location=f"Containerlab: {name}",
-                tags="containerlab,auto-discovered",
-            )
-            db.add(sw)
-            switches_created += 1
+            try:
+                with db.begin_nested():
+                    db.add(Switch(
+                        hostname=hostname,
+                        ip_address=mgmt_ip,
+                        vendor=vendor,
+                        device_type=vendor,
+                        status="unknown",
+                        location=f"Containerlab: {name}",
+                        tags="containerlab,auto-discovered",
+                    ))
+                    db.flush()
+                switches_created += 1
+            except IntegrityError:
+                # Hostname already exists in another topology — skip this node
+                switches_skipped += 1
 
     # Use python datetime
     from datetime import datetime
@@ -187,6 +194,7 @@ def sync_topology_to_db(db: Session, topology_data: dict) -> dict:
         "name": name,
         "nodes": topology_data["node_count"],
         "switches_created": switches_created,
+        "switches_skipped": switches_skipped,
     }
 
 

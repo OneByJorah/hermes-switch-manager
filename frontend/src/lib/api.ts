@@ -82,8 +82,11 @@ export interface ConfigBackupData {
 }
 
 export const configsApi = {
-  list: (switchId?: number, limit = 50) =>
-    request<ConfigBackupData[]>(`/api/configs/${switchId ? `?switch_id=${switchId}` : ''}&limit=${limit}`),
+  list: (switchId?: number, limit = 50) => {
+    const q = new URLSearchParams({ limit: String(limit) });
+    if (switchId) q.set('switch_id', String(switchId));
+    return request<ConfigBackupData[]>(`/api/configs/?${q}`);
+  },
   get: (id: number) => request<ConfigBackupData>(`/api/configs/${id}`),
   latest: (switchId: number) => request<any>(`/api/configs/${switchId}/latest`),
   diff: (backupIdA: number, backupIdB: number) =>

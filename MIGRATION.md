@@ -9,7 +9,7 @@ This repository has been consolidated with **nethermind** (previously a separate
 | Feature | Source | Description |
 |---------|--------|-------------|
 | Serial Console Support | nethermind | Out-of-band management via RS-232/USB serial |
-| Jinja2 Template Engine | nethermind | 45+ built-in config templates for HP ArubaOS and Cisco IOS |
+| Jinja2 Template Engine | nethermind | 8 built-in config templates (HP ArubaOS-Switch) |
 | Template CRUD | nethermind | Create, render, and apply configuration templates |
 
 ### New Services
@@ -17,22 +17,18 @@ This repository has been consolidated with **nethermind** (previously a separate
 - `serial_client.py` - Serial console client for out-of-band management
 - `template_engine.py` - Jinja2-based configuration template engine
 
-### Template Categories (45+ built-in)
+### Template Categories (8 built-in)
 
-| Category | Count | Vendors |
-|----------|-------|---------|
-| Initial Setup | 3 | Aruba |
-| VLAN | 4 | Aruba, Cisco |
-| Interfaces | 3 | Aruba, Cisco |
-| Security | 5 | Aruba |
-| Routing | 3 | Aruba |
-| Monitoring | 4 | Aruba |
-| Maintenance | 5 | Aruba, Cisco |
-| ACLs | 3 | Aruba |
-| STP | 2 | Aruba |
-| Management | 4 | Aruba |
-| PoE | 2 | Aruba |
-| Stacking | 2 | Aruba |
+| Category | Count |
+|----------|-------|
+| Initial Setup | 1 |
+| VLAN | 1 |
+| Interfaces | 2 |
+| Security | 2 |
+| Routing | 1 |
+| Maintenance | 1 |
+
+All built-in templates target HP ArubaOS-Switch. The engine itself is vendor-agnostic.
 
 ### Deprecated Repository
 

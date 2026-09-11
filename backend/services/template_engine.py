@@ -1,7 +1,7 @@
 """Jinja2 configuration template engine.
 
-Ported from nethermind project. Supplies 45+ built-in templates for
-HP ArubaOS-Switch and Cisco IOS, plus support for custom templates.
+Ported from nethermind project. Supplies built-in templates for
+HP ArubaOS-Switch, plus support for custom templates.
 """
 import json
 import logging

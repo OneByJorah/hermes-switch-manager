@@ -67,6 +67,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build backend image
-        run: docker build -t hsm-backend -f backend/Dockerfile .
+        run: docker build -t hsm-backend ./backend
       - name: Build frontend image
-        run: docker build -t hsm-frontend -f frontend/Dockerfile .
+        run: docker build -t hsm-frontend ./frontend

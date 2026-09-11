@@ -347,8 +347,8 @@ async def ask(session_id: str, message: str):
                         if tc.function and tc.function.arguments:
                             tool_calls[idx]["function"]["arguments"] += tc.function.arguments
 
-            # Save assistant response
-            if collected_content:
+            # Save assistant response (full combined reply is saved after tool pass)
+            if collected_content and not tool_calls:
                 db.add(ChatMessage(
                     session_id=session_id, role="assistant",
                     content=collected_content,

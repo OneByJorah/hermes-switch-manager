@@ -96,6 +96,12 @@ def delete_switch(switch_id: int, db: Session = Depends(get_db)):
     sw = db.query(Switch).filter_by(id=switch_id).first()
     if not sw:
         raise HTTPException(status_code=404, detail="Switch not found")
+
+    from models import ConfigBackup, ConfigDiff, SecurityFinding, DeviceMetric
+    db.query(DeviceMetric).filter_by(switch_id=switch_id).delete()
+    db.query(SecurityFinding).filter_by(switch_id=switch_id).delete()
+    db.query(ConfigDiff).filter_by(switch_id=switch_id).delete()
+    db.query(ConfigBackup).filter_by(switch_id=switch_id).delete()
     db.delete(sw)
     db.commit()
 

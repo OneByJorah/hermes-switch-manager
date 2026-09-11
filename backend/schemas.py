@@ -6,12 +6,15 @@ from pydantic import BaseModel, Field
 
 # ─── Switch ───
 
+IP_PATTERN = r"^(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.){3}(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)$|^[0-9a-fA-F:]{3,45}$"
+
+
 class SwitchCreate(BaseModel):
     hostname: str = Field(..., min_length=1, max_length=255)
-    ip_address: str = Field(..., min_length=7, max_length=45)
+    ip_address: str = Field(..., min_length=7, max_length=45, pattern=IP_PATTERN)
     vendor: str = "cisco_ios"
     device_type: Optional[str] = None
-    ssh_port: int = 22
+    ssh_port: int = Field(22, ge=1, le=65535)
     ssh_username: Optional[str] = None
     ssh_password: Optional[str] = None
     location: Optional[str] = None
@@ -21,10 +24,10 @@ class SwitchCreate(BaseModel):
 
 class SwitchUpdate(BaseModel):
     hostname: Optional[str] = None
-    ip_address: Optional[str] = None
+    ip_address: Optional[str] = Field(None, min_length=7, max_length=45, pattern=IP_PATTERN)
     vendor: Optional[str] = None
     device_type: Optional[str] = None
-    ssh_port: Optional[int] = None
+    ssh_port: Optional[int] = Field(None, ge=1, le=65535)
     ssh_username: Optional[str] = None
     ssh_password: Optional[str] = None
     location: Optional[str] = None

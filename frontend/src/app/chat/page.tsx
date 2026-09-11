@@ -139,21 +139,29 @@ export default function ChatPage() {
   )
 }
 
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 function StreamingMessage({ content }: { content: string }) {
-  // Simple markdown-like rendering
+  // Simple markdown-like rendering. Content is HTML-escaped first to prevent XSS.
   const parts = content.split(/(```[\s\S]*?```)/g)
   return (
     <>
       {parts.map((part, i) => {
         if (part.startsWith('```')) {
           const code = part.replace(/```\w*\n?/, '').replace(/```$/, '')
-          return <pre key={i} className="my-2">{code}</pre>
+          return <pre key={i} className="my-2">{escapeHtml(code)}</pre>
         }
-        // Bold
-        let html = part.replace(/\*\*(.*?)\*\*/g, '<strong class="text-blue-300">$1</strong>')
-        // Inline code
+        // Escape raw content, then apply safe markdown transforms on the escaped string
+        let html = escapeHtml(part)
+        html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="text-blue-300">$1</strong>')
         html = html.replace(/`([^`]+)`/g, '<code class="text-green-300 bg-slate-900 px-1 rounded">$1</code>')
-        // Line breaks
         html = html.replace(/\n/g, '<br/>')
         return <span key={i} dangerouslySetInnerHTML={{ __html: html }} />
       })}

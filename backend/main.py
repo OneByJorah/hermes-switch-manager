@@ -71,11 +71,21 @@ app.include_router(containerlab.router)
 
 @app.get("/health")
 def health_check():
-    """Health check endpoint."""
+    """Health check endpoint: verifies app and database connectivity."""
+    try:
+        from sqlalchemy import text
+        from database import SessionLocal
+        db = SessionLocal()
+        db.execute(text("SELECT 1"))
+        db.close()
+        db_ok = True
+    except Exception:
+        db_ok = False
     return {
-        "status": "ok",
+        "status": "ok" if db_ok else "degraded",
         "app": settings.APP_NAME,
         "version": settings.VERSION,
+        "database": "up" if db_ok else "down",
     }
 
 

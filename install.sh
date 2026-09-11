@@ -19,6 +19,9 @@ if [ ! -f .env ]; then
     if [ -f .env.example ]; then
         cp .env.example .env
         echo "Created .env from .env.example. Please review and set real values before production use."
+    elif [ -f backend/.env.example ]; then
+        cp backend/.env.example .env
+        echo "Created .env from backend/.env.example. Please review and set real values before production use."
     else
         echo "No .env.example found; creating empty .env"
         touch .env
