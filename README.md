@@ -6,6 +6,8 @@
 [![Top Language](https://img.shields.io/github/languages/top/OneByJorah/hermes-switch-manager?style=for-the-badge&color=FFB300&labelColor=0a0a09)](https://github.com/OneByJorah/hermes-switch-manager)
 [![Stars](https://img.shields.io/github/stars/OneByJorah/hermes-switch-manager?style=for-the-badge&color=FFB300&labelColor=0a0a09)](https://github.com/OneByJorah/hermes-switch-manager/stargazers)
 [![Last Commit](https://img.shields.io/github/last-commit/OneByJorah/hermes-switch-manager?style=for-the-badge&color=FFB300&labelColor=0a0a09)](https://github.com/OneByJorah/hermes-switch-manager/commits)
+
+![hermes-switch-manager dashboard](.github/screenshots/main.png)
 [![CI](https://img.shields.io/github/actions/workflow/status/OneByJorah/hermes-switch-manager/ci.yml?style=for-the-badge&color=FFB300&labelColor=0a0a09)](https://github.com/OneByJorah/hermes-switch-manager/actions)
 
 ## What This Is
